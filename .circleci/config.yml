@@ -1,0 +1,41 @@
+version: 2.1
+
+environment:
+  F1: cash.txt
+  F2: cash_path.txt
+
+jobs:
+  Test_Cash_create:
+    docker: 
+      - image: ubuntu
+    steps:
+      - restore_cache:
+          keys: 
+            - var-v1
+      - run: 
+          command: |
+            apt update
+            apt install apache2 -y
+      - save_cache:
+          key: var-v2
+          paths:
+            - myvar
+
+  Test_Cash_restore:
+    docker: 
+      - image: ubuntu
+    steps:
+      - restore_cache:
+          keys: 
+            - var-v2
+      - run: 
+          command: |
+            apt update
+            apt install apache2 -y
+workflows:
+  Cash_test:
+    jobs:
+      - Test_Cash_create
+      - Test_Cash_restore:
+          requires:
+            - Test_Cash_create

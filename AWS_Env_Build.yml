@@ -1,0 +1,168 @@
+Description:
+  This is For FWD Chapter 3 Ansible Test machines.
+
+Parameters:
+  EnvName:
+    Description: Project Name
+    Type: String
+  VPCCIDR:
+    Description: VPC CIDR
+    Type: String
+  PUBSUBCIDR:
+    Description: Public Subnet CIDR
+    Type: String
+  LinuxAMI:
+    Description: AMI Linux image
+    Type: String
+  VMType:
+    Description: VM type
+    Type: String
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: !Ref VPCCIDR
+      Tags: 
+        - Key: Name
+          Value: !Sub ${EnvName}-VPC
+  IntGW:
+    Type: AWS::EC2::InternetGateway
+    Properties: 
+      Tags: 
+        - Key: Name
+          Value: !Sub ${EnvName}-IntGW
+  IntGWAtt:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties: 
+      InternetGatewayId: !GetAtt IntGW.InternetGatewayId
+      VpcId: !Ref VPC
+  
+  PubSub:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      CidrBlock: !Ref PUBSUBCIDR
+      MapPublicIpOnLaunch: True
+      Tags: 
+        - Key: Name
+          Value: !Sub ${EnvName}-PubSub
+      VpcId: !Ref VPC
+  PubRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName}-PubRT
+      VpcId: !Ref VPC
+  PubRTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref PubRT
+      SubnetId: !Ref PubSub
+  PubRTRule1:
+    Type: AWS::EC2::Route
+    DependsOn: PubRT
+    Properties: 
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IntGW
+      RouteTableId: !Ref PubRT
+  RoleForSSMAccess: 
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  ServerInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Roles: 
+        - !Ref RoleForSSMAccess
+  AnsibleSerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Allow SSH to Host
+      GroupName: AnsibleSerSG
+      SecurityGroupEgress: 
+        - CidrIp: 0.0.0.0/0 
+          FromPort: -1
+          IpProtocol: -1
+          ToPort: -1
+      SecurityGroupIngress: 
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+        - CidrIp: 0.0.0.0/0
+          FromPort: -1
+          IpProtocol: icmp
+          ToPort: -1
+      Tags: 
+        - Key: Name
+          Value: AnsibleSerSG
+      VpcId: !Ref VPC
+  Master:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref ServerInstanceProfile
+      ImageId: !Ref LinuxAMI
+      InstanceType: !Ref VMType
+      KeyName: L3Key
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: "True"
+        DeviceIndex: "0"
+        GroupSet: 
+          - Ref: AnsibleSerSG
+        SubnetId: !Ref PubSub
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo -i
+          apt-get update -y
+          sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+          apt-get install python3 python3-pip -y
+          python3 -m pip install ansible
+          apt install ansible -y
+          pip install ansible
+          apt install tree
+          exit
+          pip install ansible
+          hostname Master
+      Tags: 
+          - Key: Name
+            Value: Master
+  Slave:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref ServerInstanceProfile
+      ImageId: !Ref LinuxAMI
+      InstanceType: !Ref VMType
+      KeyName: L3Key
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: "True"
+        DeviceIndex: "0"
+        GroupSet: 
+          - Ref: AnsibleSerSG
+        SubnetId: !Ref PubSub
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo -i
+          apt-get update -y
+          sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+          apt-get install python3 python3-pip -y
+          hostname Slave
+      Tags: 
+          - Key: Name
+            Value: Slave
+
+
+#aws cloudformation create-stack  --stack-name AnsibleEnv --region us-east-1 --template-body file://AWS_Env_Build.yml --parameters file://Env_Parameters.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+#login as : ubuntu
