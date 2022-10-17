@@ -132,9 +132,9 @@ Resources:
           apt install ansible -y
           pip install ansible
           apt install tree
+          hostname Master
           exit
           pip install ansible
-          hostname Master
       Tags: 
           - Key: Name
             Value: Master
