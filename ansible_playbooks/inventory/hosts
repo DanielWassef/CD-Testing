@@ -1,2 +1,2 @@
 [slave]
-Slave1 ansible_host=10.0.1.175 ansible_user=ubuntu ansible_ssh_private_key_file=~/"CD Testing"/L3Key.ppk
+Slave1 ansible_host=10.0.1.72 ansible_user=ubuntu ansible_ssh_private_key_file=~/L3Key.ppk
