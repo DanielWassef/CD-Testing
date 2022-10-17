@@ -1,6 +1,7 @@
 ---
-- name: Exercise #1
+- name: Exercise_#1
   hosts: localhost
+  become: true
 
   roles:
    - print
