@@ -14,7 +14,7 @@ jobs:
           aws-region: AWS_DEFAULT_REGION
       - run: 
           command: |
-            aws cloudformation deploy  --stack-name DeployTest-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+            aws cloudformation deploy  --stack-name DeployTest-1b633 --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
             
 
 workflows:
