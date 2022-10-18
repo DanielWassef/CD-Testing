@@ -14,13 +14,28 @@ jobs:
           aws-region: AWS_DEFAULT_REGION
       - run: 
           command: |
-            aws cloudformation deploy  --stack-name DeployTest-1b633 --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+            aws cloudformation deploy  --stack-name DeployTest-6b012 --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+
+  Config_Machine:
+    docker: 
+      #- image: ansible/ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"] 
+      - run: 
+          command: |
+            apk add --update ansible
+      - run: 
+          command: |
+            ansible-playbook -i ansible_playbooks/inventory/hosts main.yml
             
 
 workflows:
   aws_test:
     jobs:
       - create_infrastructure
-      #- Test_Cash_restore:
-       #   requires:
-        #    - Test_Cash_create
+      - Config_Machine:
+          requires:
+            - create_infrastructure
