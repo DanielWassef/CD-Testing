@@ -145,6 +145,7 @@ Resources:
           git clone https://github.com/DanielWassef/CD-Testing.git
           exit
           pip install ansible
+          sudo reboot
       Tags: 
           - Key: Name
             Value: Master
@@ -169,6 +170,7 @@ Resources:
           sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
           apt-get install python3 python3-pip -y
           echo "Slave" > /etc/hostname
+          sudo reboot
       Tags: 
           - Key: Name
             Value: Slave
