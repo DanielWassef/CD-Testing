@@ -1,3 +1,18 @@
 ---
-  - name: install apache2
-    apt: name=apache2 update_cache=yes state=latest
+  - name: install and configure apache2
+    become: true
+    apt:
+      name: apache2 
+      state: latest
+  
+  - name: Copy index.js
+    copy:
+      backup: yes
+      dest: /var/www/html/index.html
+      src: index.html
+  
+  - name: Start & Enable service
+    systemd:
+      name: apache2
+      state: started
+      enabled: yes

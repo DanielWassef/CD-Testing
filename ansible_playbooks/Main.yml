@@ -1,8 +1,7 @@
 ---
-- name: Exercise_#1
+- name: Exercise for setting up a web server in an EC2
   hosts: slave
-  become: true
 
   roles:
-   - print
-   - appache2
+    - sysupdate
+    - appache2
