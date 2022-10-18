@@ -29,7 +29,6 @@ jobs:
       - run: 
           command: |
             apk add --update ansible
-            sudo ping 18.208.157.78
       - run: 
           command: |
             ansible-playbook -i ansible_playbooks/inventory/hosts ansible_playbooks/Main.yml
