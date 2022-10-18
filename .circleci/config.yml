@@ -1,41 +1,22 @@
 version: 2.1
-
-environment:
-  F1: cash.txt
-  F2: cash_path.txt
+orbs:
+  aws-cli: circleci/aws-cli@3.1.3
 
 jobs:
-  Test_Cash_create:
+  create_infrastructure:
     docker: 
-      - image: ubuntu
+      - image: amazon/aws-cli
     steps:
-      - restore_cache:
-          keys: 
-            - var-v1
+      - checkout:
       - run: 
           command: |
-            apt update
-            apt install apache2 -y
-      - save_cache:
-          key: var-v2
-          paths:
-            - myvar
+            aws cloudformation deploy  --stack-name DeployTest-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --template-body file://aws_cd_infra_test/CD_AWS_Test.yml --parameters file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+            
 
-  Test_Cash_restore:
-    docker: 
-      - image: ubuntu
-    steps:
-      - restore_cache:
-          keys: 
-            - var-v2
-      - run: 
-          command: |
-            apt update
-            apt install apache2 -y
 workflows:
-  Cash_test:
+  aws_test:
     jobs:
-      - Test_Cash_create
-      - Test_Cash_restore:
-          requires:
-            - Test_Cash_create
+      - create_infrastructure
+      #- Test_Cash_restore:
+       #   requires:
+        #    - Test_Cash_create
