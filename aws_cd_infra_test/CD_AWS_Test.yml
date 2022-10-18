@@ -97,17 +97,9 @@ Resources:
           ToPort: -1
       SecurityGroupIngress: 
         - CidrIp: 0.0.0.0/0
-          FromPort: 22
-          IpProtocol: tcp
-          ToPort: 22
-        - CidrIp: 0.0.0.0/0
           FromPort: -1
-          IpProtocol: icmp
+          IpProtocol: -1
           ToPort: -1
-        - CidrIp: 0.0.0.0/0
-          FromPort: 80
-          IpProtocol: tcp
-          ToPort: 80
       Tags: 
         - Key: Name
           Value: DepTestSG
