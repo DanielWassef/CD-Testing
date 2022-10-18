@@ -108,6 +108,10 @@ Resources:
           FromPort: 80
           IpProtocol: tcp
           ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          FromPort: 3000
+          IpProtocol: tcp
+          ToPort: 3000
       Tags: 
         - Key: Name
           Value: DepTestSG
