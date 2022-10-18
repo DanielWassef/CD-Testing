@@ -10,6 +10,10 @@ jobs:
       - checkout
       - run: 
           command: |
+            aws configure
+            ${AWS_ACCESS_KEY_ID}
+            ${AWS_SECRET_ACCESS_KEY}
+            ${AWS_DEFAULT_REGION}
             aws cloudformation deploy  --stack-name DeployTest-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
             
 
