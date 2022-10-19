@@ -57,13 +57,8 @@ jobs:
       - config_awscli
       - run: 
           command: |
-            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@3.231.204.122 "uptime"
-            echo "output = yaml" >> ~/.aws/config
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
-            echo "*********************"
-            cat ansible_playbooks/inventory/hosts.txt
-            echo "*********************"
-            ansible-playbook -i ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
+            ansible-playbook -i ansible_playbooks/inventory/hosts.txt -u ubuntu ansible_playbooks/Main.yml
 
 workflows:
   aws_test:
