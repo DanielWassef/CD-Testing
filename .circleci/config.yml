@@ -31,6 +31,10 @@ jobs:
             apk add --update ansible
       - run: 
           command: |
+            apt-get install tree
+            tree .
+      - run: 
+          command: |
             ansible test -m ping -i ansible_playbooks/inventory/hosts -u ubuntu
             ansible-playbook -i ansible_playbooks/inventory/hosts ansible_playbooks/Main.yml
             

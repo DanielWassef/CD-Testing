@@ -1,3 +1,2 @@
 [slave]
-#Slave1 ansible_host=3.238.127.49 ansible_user=ubuntu ansible_ssh_private_key_file=~/connect.pem
-TestDeploy ansible_host=54.226.157.143 ansible_user=ubuntu
+54.226.157.143
