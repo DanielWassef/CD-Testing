@@ -40,7 +40,7 @@ jobs:
 
   ssh_Machine:
       docker: 
-        - image: ubuntu
+        - image: alpine
       steps:
         - checkout
         - add_ssh_keys:
