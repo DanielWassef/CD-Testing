@@ -35,7 +35,6 @@ jobs:
             tree -a /root
       - run: 
           command: |
-            ansible -m ping
             ansible-playbook /root/project/ansible_playbooks/Main.yml
             
 
