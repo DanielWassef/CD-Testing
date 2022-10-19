@@ -100,6 +100,14 @@ Resources:
           FromPort: -1
           IpProtocol: -1
           ToPort: -1
+        - CidrIp: 0.0.0.0/0
+          FromPort: -1
+          IpProtocol: icmp
+          ToPort: -1
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
       Tags: 
         - Key: Name
           Value: DepTestSG
@@ -125,7 +133,7 @@ Resources:
           sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
           apt-get install python3 python3-pip -y
           echo "DepTestSG" > /etc/hostname
-        #sudo reboo
+          sudo reboot
       Tags: 
           - Key: Name
             Value: DepTestSG
