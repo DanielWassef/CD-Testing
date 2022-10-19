@@ -70,7 +70,7 @@ jobs:
       - run: 
           command: |
             tree .
-            ansible-playbook -vvv -i ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
+            ansible-playbook -i ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
 
 workflows:
   aws_test:
