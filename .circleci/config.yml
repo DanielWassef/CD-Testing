@@ -50,9 +50,9 @@ jobs:
               whoami
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@34.224.71.233
             
-  Config_Machine_New:
+  New_Config_Machine:
     docker: 
-      - image: python:3.7-alpine3.11
+      - image: cimg/base:stable
     environment:
       ANSIBLE_HOST_KEY_CHECKING: False
     steps:
@@ -61,11 +61,10 @@ jobs:
           fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"] 
       - run: 
           command: |
-            apk add --update ansible
-      - run: 
-          command: |
-            apk add tree
-            tree -a /root
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible -y
       - run: 
           command: |
             ansible-playbook -vvv -i /root/project/ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
@@ -73,7 +72,7 @@ jobs:
 workflows:
   aws_test:
     jobs:
-      - Config_Machine_New
+      - New_Config_Machine
     #  - create_infrastructure
     #  - Config_Machine
     #      requires:
