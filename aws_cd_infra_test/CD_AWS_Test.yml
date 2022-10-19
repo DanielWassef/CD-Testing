@@ -89,7 +89,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: Allow SSH to Host
-      GroupName: TestSG
+      GroupName: DepTestSG
       SecurityGroupEgress: 
         - CidrIp: 0.0.0.0/0 
           FromPort: -1
@@ -97,17 +97,9 @@ Resources:
           ToPort: -1
       SecurityGroupIngress: 
         - CidrIp: 0.0.0.0/0
-          FromPort: 22
-          IpProtocol: tcp
-          ToPort: 22
-        - CidrIp: 0.0.0.0/0
           FromPort: -1
-          IpProtocol: icmp
+          IpProtocol: -1
           ToPort: -1
-        - CidrIp: 0.0.0.0/0
-          FromPort: 80
-          IpProtocol: tcp
-          ToPort: 80
       Tags: 
         - Key: Name
           Value: DepTestSG
@@ -133,7 +125,7 @@ Resources:
           sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
           apt-get install python3 python3-pip -y
           echo "DepTestSG" > /etc/hostname
-          sudo reboot
+        #sudo reboo
       Tags: 
           - Key: Name
             Value: DepTestSG
