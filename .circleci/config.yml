@@ -37,12 +37,24 @@ jobs:
           command: |
             chmode 600 connect.pem
             ansible-playbook -vvv -i /root/project/ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
+
+ssh_Machine:
+    docker: 
+      - image: ubuntu
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"] 
+      - run: 
+          command: |
+            ssh ubuntu@34.224.71.233
             
 
 workflows:
   aws_test:
     jobs:
     #  - create_infrastructure
-      - Config_Machine
+    #  - Config_Machine
     #      requires:
     #        - create_infrastructure
+      - ssh_Machine
