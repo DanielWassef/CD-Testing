@@ -65,9 +65,12 @@ jobs:
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
+            sudo apt-get install tree
+            tree .
       - run: 
           command: |
-            ansible-playbook -vvv -i /root/project/ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
+            tree .
+            ansible-playbook -vvv -i ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
 
 workflows:
   aws_test:
