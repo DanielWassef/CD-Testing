@@ -52,12 +52,11 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"]
-      - install_ansible
+#      - install_ansible
       - install_awscli
       - config_awscli
       - run: 
           command: |
-            sudo cat /etc/ssh/ssh_config
             sudo echo "StrictHostKeyChecking=no" >> /etc/ssh/ssh_config
             sudo echo "UserKnownHostsFile=/dev/null" >> /etc/ssh/ssh_config
             ssh ubuntu@3.231.204.122
