@@ -35,7 +35,6 @@ jobs:
             tree -a /root
       - run: 
           command: |
-            chmode 660 connect.pem
             ansible-playbook -vvv -i /root/project/ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
 
   ssh_Machine:
@@ -51,12 +50,32 @@ jobs:
               whoami
               ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@34.224.71.233
             
+  Config_Machine_New:
+    docker: 
+      - image: python:3.7-alpine3.11
+    environment:
+      ANSIBLE_HOST_KEY_CHECKING: False
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"] 
+      - run: 
+          command: |
+            apk add --update ansible
+      - run: 
+          command: |
+            apk add tree
+            tree -a /root
+      - run: 
+          command: |
+            ansible-playbook -vvv -i /root/project/ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
 
 workflows:
   aws_test:
     jobs:
+      - Config_Machine_New
     #  - create_infrastructure
     #  - Config_Machine
     #      requires:
     #        - create_infrastructure
-      - ssh_Machine
+    #  - ssh_Machine
