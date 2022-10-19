@@ -1,2 +1,2 @@
 [slave]
-54.226.157.143
+TestDeploy ansible_host=54.226.157.143 ansible_user=ubuntu ansible_ssh_private_key_file=/root/.ssh/id_rsa_00352d4187379c6e259a482d9edb045f
