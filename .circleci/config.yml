@@ -12,6 +12,14 @@ commands:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+  
+  config_awscli:
+    description: Config AWS CLI v2
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_DEFAULT_REGION
 
   install_ansible:
     description: Install Ansible
@@ -30,13 +38,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - aws-cli/setup:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          aws-region: AWS_DEFAULT_REGION
+      - config_awscli
       - run: 
           command: |
-            aws cloudformation deploy  --stack-name DeployTest-6b012 --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+            aws cloudformation deploy  --stack-name DeployTest --region us-east-1 --template-file aws_cd_infra_test/CD_AWS_Test.yml --parameter-overrides file://aws_cd_infra_test/CD_AWS_Test.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
 
   Config_Machine:
     docker: 
@@ -49,10 +54,7 @@ jobs:
           fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"] 
       - install_ansible
       - install_awscli
-      - aws-cli/setup:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          aws-region: AWS_DEFAULT_REGION
+      - config_awscli
       - run: 
           command: |
             aws ec2 describe-instances --query Reservations[*].Instances[*].PublicIpAddress --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
@@ -61,7 +63,7 @@ jobs:
 workflows:
   aws_test:
     jobs:
-      #- create_infrastructure
-      - Config_Machine
-          #requires:
-           # - create_infrastructure
+      - create_infrastructure
+      - Config_Machine:
+          requires:
+            - create_infrastructure

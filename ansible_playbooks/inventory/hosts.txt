@@ -1,1 +1,0 @@
-34.224.71.233 ansible_user=ubuntu
