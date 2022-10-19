@@ -49,6 +49,7 @@ jobs:
             command: |
               hostname
               whoami
+              ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
               ssh ubuntu@34.224.71.233
             
 
