@@ -35,8 +35,8 @@ jobs:
             tree -a /root
       - run: 
           command: |
-            ansible test -m ping -i ansible_playbooks/inventory/hosts -u ubuntu
-            ansible-playbook -i ansible_playbooks/inventory/hosts ansible_playbooks/Main.yml
+            ansible test -m ping
+            ansible-playbook /root/project/ansible_playbooks/Main.yml
             
 
 workflows:
