@@ -35,7 +35,7 @@ jobs:
             tree -a /root
       - run: 
           command: |
-            ansible-playbook /root/project/ansible_playbooks/Main.yml
+            ansible-playbook -i /root/project/ansible_playbooks/inventory/hosts /root/project/ansible_playbooks/Main.yml
             
 
 workflows:
