@@ -57,6 +57,7 @@ jobs:
       - config_awscli
       - run: 
           command: |
+            echo "output = yaml" >> ~/.aws/config
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
             ansible-playbook -i ansible_playbooks/inventory/hosts.txt -u ubuntu ansible_playbooks/Main.yml
 
