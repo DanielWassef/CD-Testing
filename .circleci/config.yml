@@ -40,7 +40,7 @@ jobs:
 
   ssh_Machine:
       docker: 
-        - image: alpine
+        - image: python:3.7-alpine3.11
       steps:
         - checkout
         - add_ssh_keys:
