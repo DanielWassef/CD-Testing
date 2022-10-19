@@ -35,6 +35,7 @@ jobs:
             tree -a /root
       - run: 
           command: |
+            chmode 600 connect.pem
             ansible-playbook -vvv -i /root/project/ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
             
 
