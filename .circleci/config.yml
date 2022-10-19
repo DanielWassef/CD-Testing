@@ -58,6 +58,9 @@ jobs:
       - run: 
           command: |
             aws ec2 describe-instances --query Reservations[*].Instances[*].PublicIpAddress --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
+            echo "*********************"
+            cat ansible_playbooks/inventory/hosts.txt
+            echo "*********************"
             ansible-playbook -i ansible_playbooks/inventory/hosts.txt ansible_playbooks/Main.yml
 
 workflows:
