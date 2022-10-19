@@ -32,8 +32,7 @@ jobs:
       - run: 
           command: |
             apk add tree
-            tree .
-            tree /root
+            tree -a /root
       - run: 
           command: |
             ansible test -m ping -i ansible_playbooks/inventory/hosts -u ubuntu
