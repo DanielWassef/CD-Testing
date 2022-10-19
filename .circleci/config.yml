@@ -13,7 +13,6 @@ commands:
             unzip awscliv2.zip
             sudo ./aws/install
 
-  
   config_awscli:
     description: Config AWS CLI v2
     steps:
@@ -52,7 +51,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"] 
+          fingerprints: ["00:35:2d:41:87:37:9c:6e:25:9a:48:2d:9e:db:04:5f"]
       - install_ansible
       - install_awscli
       - config_awscli
