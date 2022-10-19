@@ -57,9 +57,7 @@ jobs:
       - config_awscli
       - run: 
           command: |
-            echo "StrictHostKeyChecking=no" >> /etc/ssh/ssh_config
-            echo "UserKnownHostsFile=/dev/null" >> /etc/ssh/ssh_config
-            ssh ubuntu@3.231.204.122
+            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@3.231.204.122 "uptime"
             echo "output = yaml" >> ~/.aws/config
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
             echo "*********************"
