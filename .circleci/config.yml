@@ -31,7 +31,7 @@ jobs:
             apk add --update ansible
       - run: 
           command: |
-            apt-get install tree
+            apk add tree
             tree .
       - run: 
           command: |
