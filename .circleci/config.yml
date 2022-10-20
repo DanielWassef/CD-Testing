@@ -77,7 +77,7 @@ jobs:
             while read p; do
               if curl $p
               then
-                echo "******************Working***********************"
+                echo "********************Working*************************"
               else
                 echo "******************Not-Working***********************"
               fi
