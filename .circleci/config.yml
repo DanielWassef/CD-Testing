@@ -61,10 +61,21 @@ jobs:
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
             ansible-playbook -i ansible_playbooks/inventory/hosts.txt -u ubuntu ansible_playbooks/Main.yml
 
+  Smoke_Testing:
+    docker: 
+      - image: alpine:latest
+    steps:
+      - run: 
+          command: |
+            curl www.google.com
+
 workflows:
   aws_test:
     jobs:
-      - create_infrastructure
-      - Config_Machine:
-          requires:
-            - create_infrastructure
+      #- create_infrastructure
+      #- Config_Machine:
+          #requires:
+            #- create_infrastructure
+      - Smoke_Testing
+          #requires:
+            #- Config_Machine
