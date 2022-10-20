@@ -77,9 +77,9 @@ jobs:
             while read p; do
               if curl $p
               then
-                echo "********************Working*************************"
+                echo "******************** $p Working*************************"
               else
-                echo "******************Not-Working***********************"
+                echo "****************** $p Not-Working***********************"
               fi
             done <./ansible_playbooks/inventory/hosts.txt
             
