@@ -61,9 +61,9 @@ jobs:
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
             ansible-playbook -i ansible_playbooks/inventory/hosts.txt -u ubuntu ansible_playbooks/Main.yml
       - persist_to_workspace:
-          root: /tmp
+          root: ansible_playbooks/inventory/
           paths:
-            - /inventory/hosts.txt
+            - hosts.txt
 
   Smoke_Testing:
     docker: 
