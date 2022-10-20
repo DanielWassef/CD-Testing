@@ -65,10 +65,8 @@ jobs:
     docker: 
       - image: alpine:latest
     steps:
-      - run: 
-          command: |
-            apk add curl
-            curl www.google.com
+      - run: apk add curl
+      - run: curl www.google.com
 
 workflows:
   aws_test:
