@@ -61,9 +61,9 @@ jobs:
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
             ansible-playbook -i ansible_playbooks/inventory/hosts.txt -u ubuntu ansible_playbooks/Main.yml
       - persist_to_workspace:
-          root: ansible_playbooks/inventory/
+          root: ./
           paths:
-            - hosts.txt
+            - ansible_playbooks/inventory/hosts.txt
 
   Smoke_Testing:
     docker: 
@@ -71,7 +71,7 @@ jobs:
     steps:
       - run: apk add curl
       - attach_workspace:
-          at: /tmp
+          at: ./
       - run: 
           command: |
             while read p; do
@@ -81,7 +81,7 @@ jobs:
               else
                 echo "******************Not-Working***********************"
               fi
-            done </tmp/inventory/hosts.txt
+            done <./ansible_playbooks/inventory/hosts.txt
             
 workflows:
   aws_test:
