@@ -67,6 +67,7 @@ jobs:
     steps:
       - run: 
           command: |
+            apk add curl
             curl www.google.com
 
 workflows:
