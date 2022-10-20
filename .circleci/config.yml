@@ -60,21 +60,36 @@ jobs:
             echo "output = yaml" >> ~/.aws/config
             aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=running | cut -c 5- >> ansible_playbooks/inventory/hosts.txt
             ansible-playbook -i ansible_playbooks/inventory/hosts.txt -u ubuntu ansible_playbooks/Main.yml
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - /inventory/hosts.txt
 
   Smoke_Testing:
     docker: 
       - image: alpine:latest
     steps:
       - run: apk add curl
-      - run: curl www.google.com
-
+      - attach_workspace:
+          at: /tmp
+      - run: 
+          command: |
+            while read p; do
+              if curl $p
+              then
+                echo "******************Working***********************"
+              else
+                echo "******************Not-Working***********************"
+              fi
+            done </tmp/inventory/hosts.txt
+            
 workflows:
   aws_test:
     jobs:
-      #- create_infrastructure
-      #- Config_Machine:
-          #requires:
-            #- create_infrastructure
-      - Smoke_Testing
-          #requires:
-            #- Config_Machine
+      - create_infrastructure
+      - Config_Machine:
+          requires:
+            - create_infrastructure
+      - Smoke_Testing:
+          requires:
+            - Config_Machine
