@@ -12,7 +12,6 @@ commands:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-
   config_awscli:
     description: Config AWS CLI v2
     steps:
@@ -20,7 +19,6 @@ commands:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           aws-region: AWS_DEFAULT_REGION
-
   install_ansible:
     description: Install Ansible
     steps:
@@ -31,7 +29,12 @@ commands:
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
-
+#  destroy_environment:
+#      steps:
+#        - run:
+#            name: Destroy environment
+#            command: |
+#              aws cloudformation delete-stack --stack-name DeployTest
 jobs:
   create_infrastructure:
     docker: 
@@ -82,6 +85,8 @@ jobs:
                 echo "****************** $p Not-Working***********************"
               fi
             done <./ansible_playbooks/inventory/hosts.txt
+#      - destroy_environment
+#        when: on_fail
             
 workflows:
   aws_test:
