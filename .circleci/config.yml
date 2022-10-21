@@ -35,6 +35,7 @@ commands:
             name: Destroy environment
             command: |
               echo "FAILED"
+            when: on_fail
 #              aws cloudformation delete-stack --stack-name DeployTest
                 
 jobs:
@@ -89,7 +90,7 @@ jobs:
               fi
             done <./ansible_playbooks/inventory/hosts.txt
       - destroy_environment
-          when: "on_fail"
+
             
 workflows:
   aws_test:
