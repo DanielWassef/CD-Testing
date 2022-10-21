@@ -80,7 +80,6 @@ jobs:
           at: ./
       - run: 
           command: |
-            exit 1
             while read p; do
               if curl $p
               then
