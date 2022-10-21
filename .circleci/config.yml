@@ -89,7 +89,7 @@ jobs:
               fi
             done <./ansible_playbooks/inventory/hosts.txt
       - destroy_environment
-        when: on_fail
+          when: "on_fail"
             
 workflows:
   aws_test:
