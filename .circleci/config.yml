@@ -34,8 +34,9 @@ commands:
         - run:
             name: Destroy environment
             command: |
+              echo "FAILED"
 #              aws cloudformation delete-stack --stack-name DeployTest
-                echo "FAILED"
+                
 jobs:
   create_infrastructure:
     docker: 
