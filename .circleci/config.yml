@@ -29,12 +29,13 @@ commands:
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
-#  destroy_environment:
-#      steps:
-#        - run:
-#            name: Destroy environment
-#            command: |
+  destroy_environment:
+      steps:
+        - run:
+            name: Destroy environment
+            command: |
 #              aws cloudformation delete-stack --stack-name DeployTest
+                echo "FAILED"
 jobs:
   create_infrastructure:
     docker: 
@@ -77,6 +78,7 @@ jobs:
           at: ./
       - run: 
           command: |
+            exit 1
             while read p; do
               if curl $p
               then
@@ -85,8 +87,8 @@ jobs:
                 echo "****************** $p Not-Working***********************"
               fi
             done <./ansible_playbooks/inventory/hosts.txt
-#      - destroy_environment
-#        when: on_fail
+      - destroy_environment
+        when: on_fail
             
 workflows:
   aws_test:
